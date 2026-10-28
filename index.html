@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ja" data-theme="light">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>観察</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Zen+Antique&display=swap">
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: takashiro.com style. Light #fafafa ground, system sans, one 960px column.
+   Top page = 1:2.35 thumbnails stacked, title + date inside the image bottom-left.
+   Post = hero image, date right, bold title, body, then remaining images 40px apart, "← 戻る". */
+:root{
+  --bg:#fafafa;
+  --ink:#0a0a0a;
+  --body:rgba(0,0,0,.8);
+  --mute:rgba(0,0,0,.45);
+  --line:#dddddd;
+  --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --beni-light:#ff8a76;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+  color-scheme:light;
+}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+
+
+/* dark theme (default). Not pure black: #111 ground, warm off-white text */
+:root[data-theme="dark"]{
+  --bg:#111111;
+  --ink:#e9e5dd;
+  --body:rgba(233,229,221,.84);
+  --mute:rgba(233,229,221,.48);
+  --line:#2c2c2c;
+  color-scheme:dark;
+}
+:root[data-theme="dark"] .hdr{background:rgba(17,17,17,.92)}
+:root[data-theme="dark"] .logo small{color:#8a867f}
+:root[data-theme="dark"] .pill,:root[data-theme="dark"] .seg button{color:#a19d95}
+:root[data-theme="dark"] .pill:hover{border-color:#555;color:#e9e5dd}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{background:#e9e5dd;color:#111}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .hero,:root[data-theme="dark"] .hero-v,:root[data-theme="dark"] .figs img{background:#1b1b1b}
+:root[data-theme="dark"] .foot{border-top-color:#222}
+:root[data-theme="dark"] .body p{line-height:1.95;letter-spacing:.02em}
+:root[data-theme="dark"] .post h1{font-weight:600}
+
+/* header */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(250,250,250,.95);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.hdr .in{max-width:80rem;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.logo{text-decoration:none;line-height:1;color:var(--ink);display:inline-flex;align-items:baseline;gap:8px}
+.logo .w{font-family:var(--logo,"Zen Antique"),var(--mincho);font-size:25px;letter-spacing:.08em;font-weight:400}
+.hdr .left{display:flex;align-items:center;flex-wrap:wrap}
+.logo small{font-family:var(--mincho);font-size:10px;font-weight:400;letter-spacing:.2em;color:#555}
+.pill{font-size:12px;color:#666;background:transparent;border:1px solid var(--line);border-radius:4px;padding:4px 8px;text-decoration:none;line-height:1.2}
+.pill:hover{border-color:#bbb;color:#333}
+
+/* column */
+.col{max-width:80rem;margin:0 auto;box-sizing:border-box;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:640px){.col{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+
+/* top page */
+.list{display:flex;flex-direction:column;gap:16px;padding-block:24px 48px}
+.card{display:block;position:relative;overflow:hidden;text-decoration:none;background:#eee}
+.card img,.card video{display:block;width:100%;max-width:100%;aspect-ratio:2.35/1;object-fit:cover;transition:transform .6s ease;pointer-events:none}
+.card .cap{pointer-events:none}
+[hidden]{display:none!important}
+.card:hover img{transform:scale(1.015)}
+.card::after{content:"";position:absolute;inset:auto 0 0 0;height:22%;background:linear-gradient(to top,rgba(0,0,0,.45),rgba(0,0,0,0));pointer-events:none}
+.cap{position:absolute;left:12px;right:12px;bottom:10px;z-index:1;display:flex;align-items:baseline;flex-wrap:wrap;line-height:1.375}
+.cap .t{font-size:12px;color:rgba(255,255,255,.95)}
+.cap .d{font-size:11px;color:rgba(255,255,255,.8);margin-left:8px}
+.cap .k{font-size:11px;color:rgba(255,255,255,.8);margin-left:auto}
+@media (min-width:768px){.cap{left:18px;bottom:16px}.cap .t{font-size:14px}.cap .d,.cap .k{font-size:12px}}
+
+/* post */
+.post{padding-block:24px 64px}
+.hero,.hero-v{display:block;width:100%;max-width:100%;aspect-ratio:2.35/1;object-fit:cover;background:#eee}
+.hero-wrap{position:relative}
+.snd{position:absolute;left:12px;bottom:10px;font:inherit;font-size:11px;letter-spacing:.08em;color:#fff;background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:4px 11px;cursor:pointer}
+.snd[aria-pressed="true"]{background:rgba(255,255,255,.88);color:#111}
+.vtag{position:absolute;right:12px;bottom:10px;font-size:11px;color:rgba(255,255,255,.85);background:rgba(0,0,0,.35);padding:3px 7px;border-radius:3px}
+.stamp{margin:8px 0 0;text-align:right;font-size:12px;line-height:1;color:var(--mute);font-variant-numeric:tabular-nums}
+.post h1{margin:40px 0 8px;font-size:24px;line-height:1.25;font-weight:700;color:var(--ink);text-wrap:balance}
+@media (min-width:640px){.post h1{font-size:30px}}
+.place{font-size:12px;color:var(--mute);margin:0 0 24px}
+.post h1,.post .place,.post .body{max-width:44rem}
+.body p{margin:0 0 24px;font-size:17px;line-height:1.8;color:var(--body)}
+.figs{display:flex;flex-direction:column;gap:40px;margin-top:48px}
+.figs figure{margin:0}
+.figs img{display:block;width:100%;max-width:100%;aspect-ratio:2.35/1;object-fit:cover;background:#eee}
+.back{display:inline-block;margin-top:48px;font-size:14px;color:var(--mute);text-decoration:none}
+.back:hover{color:var(--ink)}
+.draft{color:var(--mute)!important}
+
+/* footer */
+.foot{border-top:1px solid #eee}
+.foot .col{padding-block:28px 40px;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:12px;color:var(--mute)}
+.foot a{text-decoration:none}
+
+
+/* language dropdown */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.lang{position:relative;display:inline-flex}
+.lang select{-webkit-appearance:none;appearance:none;font:inherit;font-size:12px;line-height:1.2;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:4px;padding:5px 26px 5px 10px;cursor:pointer}
+.lang::after{content:"";position:absolute;right:10px;top:50%;width:6px;height:6px;margin-top:-5px;border-right:1.2px solid currentColor;border-bottom:1.2px solid currentColor;transform:rotate(45deg);pointer-events:none;color:var(--mute)}
+.lang select:hover{border-color:#bbb}
+:root[data-theme="dark"] .lang select{background:#111}
+
+/* controls (prototype) */
+.ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.seg{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{font:inherit;font-size:11.5px;color:#666;background:transparent;border:0;padding:4px 8px;cursor:pointer;line-height:1.2}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:#111;color:#fff}
+@media (max-width:560px){.hdr .in{height:auto;padding-block:12px;gap:10px;flex-wrap:wrap}}
+
+/* vertical caption: top-right */
+.v .card::after{inset:0 0 0 auto;width:22%;height:auto;background:linear-gradient(to left,rgba(0,0,0,.32),rgba(0,0,0,0))}
+.v .cap{writing-mode:vertical-rl;display:flex;flex-direction:column;gap:10px;left:auto;right:14px;top:16px;bottom:16px;flex-wrap:nowrap;align-items:stretch}
+.v .c1,.v .c2{display:flex;align-items:center}
+.v .cap .t{font-family:var(--mincho);font-size:14px;letter-spacing:.34em;color:#fff;margin:0;white-space:nowrap}
+.v .lead{flex:1;min-inline-size:24px;block-size:1px;align-self:center;margin:0;margin-inline:14px;
+  background:linear-gradient(to bottom,rgba(255,255,255,.6) 1px,transparent 1px) 0 0/1px 5px repeat-y}
+.v .c1{block-size:auto;inline-size:100%}
+
+.v .pl{font-family:var(--mincho);font-weight:600;font-size:11px;letter-spacing:.16em;color:rgba(255,255,255,.9);white-space:nowrap}
+.v .c2 .k{margin:0;font-size:10.5px;letter-spacing:.2em;color:var(--beni-light)}
+.v .c2 .d{margin:auto 0 0;font-size:10px;letter-spacing:.06em;color:rgba(255,255,255,.75)}
+@media (min-width:768px){.v .cap{right:22px;top:24px;bottom:24px;gap:14px}.v .cap .t{font-size:16px}.v .pl{font-size:12.5px}}
+@media (max-width:600px){
+  .v .cap{right:9px;top:9px;bottom:9px}
+  .v .cap .t{font-size:12.5px;letter-spacing:.2em}
+  .v .lead{margin-inline:7px;min-inline-size:10px}
+  .v .pl{font-size:9.5px;letter-spacing:.06em}
+}
+</style>
+
+<header class="hdr">
+  <div class="in">
+    <div class="left">
+      <a class="logo" href="#index"><span class="w" id="logo-w">KANSATSU</span><small>観察</small></a>
+    </div>
+    <div class="ctrl">
+      <label class="lang"><span class="sr">Language</span>
+        <select id="lang-sel" aria-label="Language">
+          <option value="ja">日本語</option><option value="en">English</option><option value="es">Español</option><option value="fr">Français</option>
+        </select>
+      </label>
+
+      <div class="seg" role="group" aria-label="背景（比較用）" id="theme-seg" hidden><button type="button" data-theme-set="dark" aria-pressed="false">黒</button><button type="button" data-theme-set="light" aria-pressed="true">白</button></div>
+      <a class="pill" href="#about">About</a>
+    </div>
+  </div>
+</header>
+
+<!-- top page -->
+<main id="v-index" class="col list" aria-label="投稿一覧"></main>
+
+<!-- post -->
+<main id="v-post" class="col post" hidden>
+  <div class="hero-wrap"><img class="hero" id="p-hero" src="" alt=""><span class="vtag" id="p-vtag" hidden></span><button type="button" class="snd" id="p-sound" hidden aria-pressed="false">音を出す</button></div>
+  <p class="stamp"><time id="p-time"></time></p>
+  <h1 id="p-title"></h1>
+  <p class="place" id="p-place"></p>
+  <div class="body" id="p-body"></div>
+  <div class="figs" id="p-figs"></div>
+  <a class="back" href="#index">← 戻る</a>
+</main>
+
+<!-- about -->
+<main id="v-about" class="col post" hidden>
+  <img class="hero" src="img/train.webp" alt="海沿いを走る電車の車内。窓際の席で、帽子をかぶった男性が窓の外の海を見ている。">
+  <p class="stamp">Côte d'Azur</p>
+  <h1>定点</h1>
+  <p class="place">Shotaro Kondo　映像作家・写真家　Dubai</p>
+  <div class="body">
+    <p>立ち止まって、ひとつのものをずっと見つめる。<br>それが、僕にとっていちばん心地いい時間だ。</p>
+    <p>瞑想をはじめて、もう十年ほどになる。<br>普段の瞑想では、目を閉じて、自然な呼吸や体に生じる感覚に意識を向ける。<br>これは、それとは少し違う。<br>自分が美しいと感じた場所に立ち止まり、何も足さず、何も引かず、ただひたすら見続ける。</p>
+    <p>カンヌの旧市街。クレープ屋の前の路地に、目線の高さでカメラを置いた。<br>しばらくすると、買い物袋を提げた女性が歩いてきて、向こうから来た友人と頬を寄せて挨拶をする。<br>二言、三言。笑って、それぞれの方向へ去っていく。<br>フレームには、またさっきと同じ路地が残る。</p>
+    <p>見ていると、街は音楽に似ている。<br>最初に一定のビートがあって、人の足音がそれを刻む。<br>そこにバイオリンのように鳥が横切り、シンセサイザーのように風が木の枝を揺らす。<br>誰も指揮していないのに、全部がちゃんと鳴っている。</p>
+    <p>見続けていると、ある瞬間、見ている自分と見られている街の境目が薄くなる。<br>歩いていく人も、鳥も、風に揺れる枝も、それを見ている僕も、同じひとつの大きな仕組みの中にある。<br>この地球の上で、太陽のまわりを巡るシステムの中で、僕もまた、そこに生じている感覚のひとつに過ぎない。<br>普段の瞑想が自分の内側へ向かうものだとしたら、これは外へ向かう瞑想なのかもしれない。</p>
+    <p>正直に言うと、カメラがなければ、僕はこれをうまくできない。<br>人混みの中でずっと立ち止まって何かを見つめていたら、きっと変に思われる。<br>他人の目が気になる自分が、まだいる。<br>でもカメラを持っていると、不思議と堂々とそこにいられる。<br>カメラは記録の道具であると同時に、僕が立ち止まるための許可証なのだ。</p>
+    <p>そうやって一分、長いときは二十分以上、同じ場所を見続ける。<br>パリのポルト・ド・ヴェルサイユでは、曇り空の下、人々が足早に横断歩道を渡り、その向こうでトラムが静かに止まっていた。<br>コート・ダジュールの海沿いを走る電車では、窓際の席にカメラを固定して、窓と、外を眺める自分自身を撮った。</p>
+    <p>フレームに人が入ってくるたびに思う。<br>この人にも、この人にも、それぞれの朝があって、行き先がある。<br>一つのフレームを百人が通り過ぎれば、そこには百通りの人生がある。<br>僕はそのほんの数秒を、少し離れたところから見せてもらっているだけだ。</p>
+    <p>このブログには、そうして見つめてきた場所と、そこで感じたことを、淡々と置いていこうと思う。<br>誰にも急かされない場所に。</p>
+    <p>よかったら、少しだけ一緒に立ち止まってみてください。</p>
+  </div>
+  <a class="back" href="#index">← 戻る</a>
+</main>
+
+<footer class="foot">
+  <div class="col">
+    <span>© 2026 KANSATSU</span>
+    <a href="#index">RSS Feed</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // 投稿データ。写真の回は images（最大3枚）、動画の回は video（1本）。本文とタイトル・日付は仮。
+  var POSTS=[
+    {id:'london',title:'自転車',route:'London',time:'2026/10/27 18:00',place:'London — Mayfair',
+     video:{poster:'london_poster',len:'0:38',post:'london_post',still:'london_poster.avif',moving:true},
+     body:['僕は仕事仲間のレンドゥルに、こんな質問をした。<br>「ロンドンで自転車を漕ぐのと、ドバイでモーターサイクルに乗ってぶっ飛ばすの、どっちが好き？」','めちゃくちゃ答えるのが難しい質問だ、とレンドゥルは言った。<br>でも、どっちか一つしか選べないなら、ロンドンで自転車に乗るほうを選ぶ、と。','ヘルメットもかぶらないし、自由だし、風も気持ちいいから。']},
+    {id:'train2',title:'車窓',route:'Nice → Cannes',time:'2026/10/27 16:20',place:'Nice → Cannes',
+     video:{poster:'train2_poster',len:'3:04',loop:'train2_loop',post:'train2_post',still:'train2_poster.avif'},
+     body:['ニースからの電車で、窓の外を撮ろうとカメラを置いた。<br>あとで見返すと、映っていたのは海よりも、ずっと顎を触っている自分の手だった。','人は、いつも何かを触っている。<br>手に持ったペンをくるくる回す。坊主頭のざらつきを確かめるように、何度も撫でる。顎と首のあいだに手を置いて、ぽんぽんと叩く。僕の場合は首が凝るので、気づけばそこを揉んでいる。頬のニキビが気になって、つい指が行く。','どれも、意味のある動きではない。<br>でも、止まってもいない。','もしかすると人は、こうして自分で小さな揺らぎを作っているのかもしれない。焚き火の炎や、波の音のように、規則正しすぎず、でたらめでもないリズム。外の世界にそれがないとき、自分の体でそれを補っている。そうやって、言葉にならない不安を、少しずつならしているのではないか。','面白いのは、毎日欠かさず瞑想をしていると、この動きに気づけるようになることだ。手が顎に向かったその瞬間に、「あ、今触ろうとしている」とわかる。そして、それをやめようとしている自分にも気づく。','そこで思う。<br>人は不安を感じているときだけでなく、不安を感じていることすら感じていないときがあるのではないか。この手の動きは、その証拠なのかもしれない。','窓の外では、ヤシの木が一本、ゆっくりと通り過ぎていった。<br>僕の手は、まだ顎のあたりにある。']},
+    {id:'crossing',title:'交差点',time:'2026/10/27 16:20',place:'Paris — Porte de Versailles',
+     images:['versailles','avenue','cafe'],
+     body:['［仮の本文］曇り空の夕方。<br>トラムが止まるたびに、人の波が横断歩道に押し出されてくる。<br>信号が変わると、また静かになる。','その繰り返しを、メトロの入口の脇から見ていた。']},
+    {id:'creperie',title:'路地',time:'2026/10/20 16:20',place:'Cannes — Rue Meynadier',
+     video:{poster:'creperie',len:'1:10',loop:'creperie_loop',post:'creperie_post',still:'creperie_poster.avif'},
+     body:['カンヌの旧市街、クレープ屋の前の路地。<br>同じ場所に留まって、カメラを回し続けた。','午後の光が、路地を照らしている。<br>人は影の中から歩いてきて、その光の中を通り、また影の中へ消えていく。<br>まるで、袖から舞台に出てくる役者のように。','スポットライトを浴びるのは、ほんの数秒。<br>買い物袋を提げた女性が、向こうから来た友人と頬を寄せて挨拶をする。<br>二言、三言。笑って、それぞれの袖へ去っていく。<br>すると次の人が、また光の中に入ってくる。','誰も台本を持っていない。誰も主役を決めていない。<br>それでも光の中に入った瞬間、その人はちゃんと、その人自身の物語の主役として映し出される。','僕は同じ場所に留まって、一人一人の人生のストーリーを、少しだけ覗き見ている。<br>光が当たっているのは数秒でも、その人の物語は、フレームの外でずっと続いている。','一人一人が、かけがえのない存在で。<br>一人一人に、僕の知らない深いストーリーがある。<br>この路地は、それを思い出させてくれる舞台だ。']},
+    {id:'underpass',title:'高架下',time:'2026/10/13 16:20',place:'Paris',
+     video:{poster:'underpass',len:'1:00'},
+     body:['［仮の本文］高架の影の中から、明るい出口のほうを見ていた。<br>人はみな、光のほうへ歩いていく。']},
+    {id:'train',title:'車窓',route:'Cannes → Nice',time:'2026/10/06 16:20',place:'Cannes → Nice',
+     video:{poster:'train',len:'22:00'},
+     body:['［仮の本文］窓際の席にカメラを固定した。<br>右の窓には、海がずっと続いている。']}
+  ];
+  var T={
+    crossing:{en:'Crossing',es:'Cruce',fr:'Carrefour'},
+    creperie:{en:'The Alley',es:'Callejón',fr:'La ruelle'},
+    underpass:{en:'Viaduct',es:'Viaducto',fr:'Viaduc'},
+    train:{en:'Window',es:'Ventanilla',fr:'Fenêtre'},
+    train2:{en:'Window',es:'Ventanilla',fr:'Fenêtre'},
+    london:{en:'Bicycle',es:'Bicicleta',fr:'Vélo'}};
+  var BODY={"train2": {"en": ["On the train out of Nice, I set up the camera to film the view from the window.<br>When I watched it back, what it had caught, more than the sea, was my own hand, touching my chin the whole time.", "People are always touching something.<br>Spinning a pen between their fingers. Running a palm over a buzzed head again and again, as if checking how rough it is. Resting a hand between the jaw and the neck and tapping it lightly. In my case, my neck gets stiff, so I find myself kneading it. A spot on my cheek bothers me, and a finger drifts there.", "None of these movements mean anything.<br>But they never quite stop, either.", "Maybe this is how we make our own small fluctuations. Like the flicker of a fire or the sound of waves: a rhythm neither too regular nor random. When the world outside doesn't offer it, we supply it with our own bodies. And in doing so, little by little, we smooth out an unease we can't put into words.", "The interesting thing is that, meditating every day without fail, I've started to notice these movements. The moment my hand heads for my chin, I know: I'm about to touch it. And I notice the part of me that wants to stop.", "Which makes me wonder.<br>Perhaps there are times when we're not only uneasy, but don't even feel that we're uneasy. This movement of the hand may be the proof.", "Outside the window, a single palm tree drifted slowly by.<br>My hand is still somewhere near my chin."], "es": ["En el tren desde Niza, coloqué la cámara para filmar lo que pasaba por la ventanilla.<br>Al verlo después, lo que había quedado, más que el mar, era mi propia mano, tocándome la barbilla todo el tiempo.", "Las personas siempre están tocando algo.<br>Hacen girar un bolígrafo entre los dedos. Se pasan la mano una y otra vez por la cabeza rapada, como comprobando su aspereza. Apoyan la mano entre la mandíbula y el cuello y se dan golpecitos. En mi caso, se me carga el cuello, así que sin darme cuenta me lo masajeo. Un grano en la mejilla me molesta y el dedo se me va hacia él.", "Ninguno de estos gestos tiene sentido.<br>Pero tampoco se detienen.", "Quizá así es como fabricamos nuestras propias pequeñas oscilaciones. Como el parpadeo de una hoguera o el sonido de las olas: un ritmo ni demasiado regular ni del todo azaroso. Cuando el mundo exterior no nos lo da, lo suplimos con el cuerpo. Y así, poco a poco, vamos calmando una inquietud que no sabemos poner en palabras.", "Lo curioso es que, meditando cada día sin falta, empiezo a darme cuenta de estos gestos. En el instante en que la mano va hacia la barbilla, lo sé: «ahora voy a tocarla». Y también me doy cuenta de la parte de mí que quiere parar.", "Entonces pienso.<br>Tal vez no solo sentimos inquietud, sino que a veces ni siquiera sentimos que la sentimos. Este movimiento de la mano quizá sea la prueba.", "Al otro lado de la ventanilla, una palmera pasó despacio.<br>Mi mano sigue cerca de la barbilla."], "fr": ["Dans le train au départ de Nice, j'ai posé la caméra pour filmer ce qui défilait derrière la vitre.<br>En revoyant les images, ce qu'elle avait saisi, plus que la mer, c'était ma propre main, qui me touchait le menton sans arrêt.", "Nous touchons toujours quelque chose.<br>On fait tourner un stylo entre ses doigts. On passe la main encore et encore sur sa tête rasée, comme pour en vérifier la rugosité. On pose la main entre la mâchoire et le cou, et on tapote. Moi, j'ai la nuque raide, alors je me surprends à la masser. Un bouton sur la joue me gêne, et mon doigt y revient.", "Aucun de ces gestes n'a de sens.<br>Mais aucun ne s'arrête vraiment.", "Peut-être fabriquons-nous ainsi nos propres petites fluctuations. Comme la flamme d'un feu ou le bruit des vagues : un rythme ni trop régulier, ni tout à fait aléatoire. Quand le monde extérieur ne nous l'offre pas, notre corps y supplée. Et, peu à peu, nous apaisons une inquiétude que nous ne savons pas nommer.", "Ce qui est curieux, c'est qu'en méditant chaque jour, sans exception, je commence à remarquer ces gestes. À l'instant où ma main se dirige vers mon menton, je le sais : « je vais le toucher ». Et je remarque aussi la part de moi qui voudrait arrêter.", "Alors je me demande.<br>Peut-être sommes-nous parfois inquiets sans même sentir que nous le sommes. Ce mouvement de la main en serait la preuve.", "Derrière la vitre, un palmier est passé lentement.<br>Ma main est encore quelque part près de mon menton."]}, "london": {"en": ["I asked my colleague Lendl a question.<br>“Which do you like more: cycling in London, or tearing around Dubai on a motorcycle?”", "That's a really hard question to answer, Lendl said.<br>But if only one could be chosen, it would be cycling in London.", "No helmet, the freedom, and the wind feels good."], "es": ["Le hice una pregunta a mi compañero de trabajo, Lendl.<br>«¿Qué te gusta más: ir en bici por Londres o volar en moto por Dubái?»", "Es una pregunta dificilísima de responder, dijo Lendl.<br>Pero si solo se puede elegir una, elegiría ir en bici por Londres.", "Sin casco, con libertad, y el viento sienta bien."], "fr": ["J'ai posé une question à mon collègue, Lendl.<br>« Tu préfères quoi : pédaler dans Londres, ou filer à toute allure à moto à Dubaï ? »", "C'est une question terriblement difficile, a dit Lendl.<br>Mais s'il ne fallait en choisir qu'une, ce serait le vélo à Londres.", "Pas de casque, la liberté, et le vent qui fait du bien."]}, "creperie": {"en": ["The old town of Cannes, the alley in front of a crêperie.<br>I stayed in one place and kept the camera rolling.", "Afternoon light falls across the alley.<br>People walk out of the shadow, pass through that light, and disappear into shadow again.<br>Like actors stepping from the wings onto a stage.", "They stand in the spotlight for only a few seconds.<br>A woman carrying shopping bags leans in to greet a friend coming the other way, cheek to cheek.<br>A word or two. A laugh, and each exits toward her own wing.<br>Then the next person steps into the light.", "No one has a script. No one has chosen the lead.<br>And yet, the moment they enter the light, each person is shown as the lead of their own story.", "I stay in one place and catch a glimpse, just a little, of each person's life story.<br>The light holds them for only seconds, but their story goes on, long after they leave the frame.", "Each one irreplaceable.<br>Each one with a deep story I will never know.<br>This alley is a stage that reminds me of that."], "es": ["El casco antiguo de Cannes, el callejón frente a una crepería.<br>Me quedé en el mismo lugar y dejé la cámara grabando.", "La luz de la tarde ilumina el callejón.<br>La gente sale de la sombra, cruza esa luz y vuelve a desaparecer en la sombra.<br>Como actores que salen de bastidores al escenario.", "Bajo el foco están apenas unos segundos.<br>Una mujer con bolsas de la compra se acerca a una amiga que viene de frente y se saludan mejilla con mejilla.<br>Dos o tres palabras. Se ríen, y cada una sale hacia sus propios bastidores.<br>Y entonces otra persona entra en la luz.", "Nadie tiene guion. Nadie ha decidido quién es el protagonista.<br>Y aun así, en el momento en que entra en la luz, cada persona aparece como protagonista de su propia historia.", "Me quedo en el mismo lugar y me asomo, solo un poco, a la historia de cada vida.<br>La luz las sostiene apenas unos segundos, pero su historia continúa, fuera del encuadre.", "Cada persona, insustituible.<br>Cada una, con una historia profunda que yo nunca conoceré.<br>Este callejón es el escenario que me lo recuerda."], "fr": ["La vieille ville de Cannes, la ruelle devant une crêperie.<br>Je suis resté au même endroit et j'ai laissé tourner la caméra.", "La lumière de l'après-midi éclaire la ruelle.<br>Les gens sortent de l'ombre, traversent cette lumière, puis disparaissent à nouveau dans l'ombre.<br>Comme des comédiens qui entrent en scène depuis les coulisses.", "Ils ne restent sous le projecteur que quelques secondes.<br>Une femme chargée de sacs de courses se penche vers une amie venue en face, et elles se font la bise.<br>Deux ou trois mots. Un rire, et chacune repart vers ses coulisses.<br>Puis quelqu'un d'autre entre dans la lumière.", "Personne n'a de texte. Personne n'a choisi le premier rôle.<br>Et pourtant, à l'instant où il entre dans la lumière, chacun apparaît comme le héros de sa propre histoire.", "Je reste au même endroit et j'entrevois, un peu seulement, l'histoire de chaque vie.<br>La lumière ne les retient que quelques secondes, mais leur histoire continue, bien au-delà du cadre.", "Chacun, irremplaçable.<br>Chacun, porteur d'une histoire profonde que je ne connaîtrai jamais.<br>Cette ruelle est la scène qui me le rappelle."]}, "crossing": {"en": ["[Draft] A cloudy evening.<br>Each time the tram stops, a wave of people spills onto the crossing.<br>When the light changes, it goes quiet again.", "I watched it repeat from beside the metro entrance."], "es": ["[Borrador] Una tarde nublada.<br>Cada vez que el tranvía se detiene, una ola de gente se derrama sobre el paso de cebra.<br>Cuando cambia el semáforo, todo vuelve a quedar en calma.", "Lo vi repetirse desde un lado de la entrada del metro."], "fr": ["[Brouillon] Un soir de ciel gris.<br>À chaque arrêt du tram, une vague de passants déborde sur le passage piéton.<br>Quand le feu change, tout redevient calme.", "J'ai regardé ce manège se répéter, à côté de l'entrée du métro."]}, "underpass": {"en": ["[Draft] From inside the shadow of the viaduct, I looked toward the bright opening.<br>Everyone walks toward the light."], "es": ["[Borrador] Desde la sombra del viaducto, miraba hacia la salida iluminada.<br>Todos caminan hacia la luz."], "fr": ["[Brouillon] Depuis l'ombre du viaduc, je regardais vers la sortie lumineuse.<br>Tout le monde marche vers la lumière."]}, "train": {"en": ["[Draft] I fixed the camera at the window seat.<br>In the window on the right, the sea goes on and on."], "es": ["[Borrador] Fijé la cámara en el asiento de la ventanilla.<br>En la ventanilla de la derecha, el mar no se acaba."], "fr": ["[Brouillon] J'ai fixé la caméra sur le siège côté fenêtre.<br>Dans la vitre de droite, la mer s'étend sans fin."]}};
+  var ABOUT={"en": {"h": "Fixed Point", "place": "Shotaro Kondo　Filmmaker & Photographer　Dubai", "p": ["To stop, and keep looking at one thing.<br>For me, there is no more comfortable time than that.", "I've been meditating for about ten years now.<br>Usually, I close my eyes and turn my attention to my natural breath and the sensations arising in my body.<br>This is a little different.<br>I stop in a place I find beautiful, add nothing, take nothing away, and simply keep looking.", "The old town of Cannes. I set the camera at eye level in the alley in front of a crêperie.<br>After a while, a woman carrying shopping bags walks up and greets a friend coming the other way, cheek to cheek.<br>A word or two. They laugh and go their separate ways.<br>And the frame is left with the same alley as before.", "Watching, I find that a city resembles music.<br>First there is a steady beat, kept by people's footsteps.<br>Birds cross it like a violin; the wind stirs the branches like a synthesizer.<br>No one is conducting, yet everything is playing.", "If I keep watching, at some point the line between me, watching, and the city being watched grows thin.<br>The people walking past, the birds, the branches in the wind, and I, watching them: all of us are part of one large system.<br>On this earth, in a system circling the sun, I too am just one of the sensations arising there.<br>If ordinary meditation turns inward, perhaps this is a meditation that turns outward.", "To be honest, without a camera I can't really do this.<br>If I stood still in a crowd, staring at something for a long time, people would surely think it strange.<br>There is still a part of me that cares what others think.<br>But with a camera in my hands, somehow I can stand there without hesitation.<br>The camera is a tool for recording, and at the same time, my permit to stop.", "So I keep watching the same place for a minute, sometimes more than twenty.<br>At Porte de Versailles in Paris, under a cloudy sky, people hurried across the crossing while a tram stood quietly beyond them.<br>On a train along the Côte d'Azur, I fixed the camera at the window seat and filmed the window, and myself looking out.", "Every time someone enters the frame, I think:<br>this person, and this one, each has a morning of their own and somewhere to go.<br>If a hundred people pass through one frame, there are a hundred lives there.<br>All I do is get to see a few seconds of them, from a little way off.", "On this blog, I'll quietly set down the places I've watched like this, and what I felt there.<br>In a place where no one hurries you.", "If you like, stop here with me for a little while."]}, "es": {"h": "Punto fijo", "place": "Shotaro Kondo　Cineasta y fotógrafo　Dubái", "p": ["Detenerme y mirar una sola cosa durante mucho tiempo.<br>Para mí, no hay momento más agradable.", "Llevo unos diez años meditando.<br>Normalmente cierro los ojos y llevo la atención a la respiración natural y a las sensaciones que surgen en el cuerpo.<br>Esto es un poco distinto.<br>Me detengo en un lugar que me parece bello y, sin añadir ni quitar nada, simplemente sigo mirando.", "El casco antiguo de Cannes. Coloqué la cámara a la altura de los ojos en el callejón frente a una crepería.<br>Al rato, una mujer con bolsas de la compra se acerca y saluda, mejilla con mejilla, a una amiga que viene de frente.<br>Dos o tres palabras. Se ríen y cada una se va por su lado.<br>Y en el encuadre vuelve a quedar el mismo callejón de antes.", "Mirando, la ciudad se parece a la música.<br>Primero hay un ritmo constante, que marcan los pasos de la gente.<br>Un pájaro lo cruza como un violín; el viento mece las ramas como un sintetizador.<br>Nadie dirige, y sin embargo todo suena.", "Si sigo mirando, en algún momento se difumina la frontera entre yo, que miro, y la ciudad que es mirada.<br>La gente que pasa, los pájaros, las ramas que mece el viento y yo, que los miro: todos estamos dentro de un mismo gran sistema.<br>Sobre esta tierra, en un sistema que gira alrededor del sol, yo también soy solo una de las sensaciones que surgen allí.<br>Si la meditación habitual mira hacia dentro, quizá esta sea una meditación que mira hacia fuera.", "Para ser sincero, sin una cámara no sé hacerlo bien.<br>Si me quedara quieto entre la multitud mirando algo durante mucho rato, seguro que parecería raro.<br>Todavía hay una parte de mí a la que le importa la mirada de los demás.<br>Pero con una cámara en la mano, curiosamente, puedo estar ahí con naturalidad.<br>La cámara es una herramienta para registrar y, a la vez, mi permiso para detenerme.", "Así sigo mirando el mismo lugar durante un minuto, a veces más de veinte.<br>En la Porte de Versailles de París, bajo un cielo nublado, la gente cruzaba deprisa el paso de cebra mientras, más allá, un tranvía se detenía en silencio.<br>En un tren que recorre la Costa Azul, fijé la cámara en el asiento de la ventanilla y filmé la ventana, y a mí mismo mirando hacia fuera.", "Cada vez que alguien entra en el encuadre, pienso:<br>esta persona, y esta otra, cada una tiene su mañana y un lugar al que ir.<br>Si cien personas pasan por un mismo encuadre, ahí hay cien vidas.<br>Yo solo tengo la suerte de ver unos segundos de ellas, desde un poco más allá.", "En este blog iré dejando, con calma, los lugares que he mirado así y lo que sentí en ellos.<br>En un lugar donde nadie te mete prisa.", "Si quieres, detente aquí conmigo un momento."]}, "fr": {"h": "Point fixe", "place": "Shotaro Kondo　Réalisateur et photographe　Dubaï", "p": ["M'arrêter, et regarder longtemps une seule chose.<br>Pour moi, il n'y a pas de moment plus agréable.", "Je médite depuis une dizaine d'années.<br>D'habitude, je ferme les yeux et je porte mon attention sur ma respiration naturelle et sur les sensations qui naissent dans le corps.<br>Ici, c'est un peu différent.<br>Je m'arrête dans un endroit que je trouve beau, sans rien ajouter, sans rien retirer, et je continue simplement de regarder.", "La vieille ville de Cannes. J'ai posé la caméra à hauteur des yeux, dans la ruelle devant une crêperie.<br>Au bout d'un moment, une femme chargée de sacs de courses arrive et fait la bise à une amie venue en face.<br>Deux ou trois mots. Elles rient, puis repartent chacune de son côté.<br>Et dans le cadre, il reste la même ruelle qu'avant.", "À force de regarder, la ville ressemble à de la musique.<br>D'abord un battement régulier, que marquent les pas des passants.<br>Un oiseau le traverse comme un violon ; le vent agite les branches comme un synthétiseur.<br>Personne ne dirige, et pourtant tout joue.", "Si je continue de regarder, à un moment, la frontière entre moi qui regarde et la ville regardée s'estompe.<br>Les passants, les oiseaux, les branches dans le vent, et moi qui les regarde : nous faisons tous partie d'un même grand système.<br>Sur cette terre, dans un système qui tourne autour du soleil, je ne suis moi aussi qu'une des sensations qui y naissent.<br>Si la méditation ordinaire se tourne vers l'intérieur, celle-ci est peut-être une méditation tournée vers l'extérieur.", "Pour être honnête, sans caméra, je n'y arrive pas vraiment.<br>Si je restais immobile au milieu de la foule à fixer quelque chose longtemps, on me trouverait sûrement bizarre.<br>Il y a encore en moi une part qui se soucie du regard des autres.<br>Mais avec une caméra à la main, étrangement, je peux rester là sans gêne.<br>La caméra est un outil pour enregistrer, et en même temps mon permis de m'arrêter.", "Je regarde ainsi le même endroit pendant une minute, parfois plus de vingt.<br>À la Porte de Versailles, à Paris, sous un ciel gris, les gens traversaient vite le passage piéton tandis qu'au-delà un tram s'arrêtait en silence.<br>Dans un train qui longe la Côte d'Azur, j'ai fixé la caméra au siège côté fenêtre et filmé la vitre, et moi-même regardant dehors.", "Chaque fois que quelqu'un entre dans le cadre, je me dis :<br>cette personne, et celle-ci, chacune a son matin et un endroit où aller.<br>Si cent personnes traversent un même cadre, il y a là cent vies.<br>Moi, j'ai seulement la chance d'en voir quelques secondes, d'un peu plus loin.", "Sur ce blog, je déposerai tranquillement les endroits que j'ai regardés ainsi, et ce que j'y ai ressenti.<br>Dans un lieu où personne ne vous presse.", "Si vous le voulez, arrêtez-vous un instant ici avec moi."]}};
+  var UI={"back": {"ja": "← 戻る", "en": "← Back", "es": "← Volver", "fr": "← Retour"}, "son": {"ja": "音を出す", "en": "Sound on", "es": "Activar sonido", "fr": "Activer le son"}, "soff": {"ja": "音を消す", "en": "Sound off", "es": "Silenciar", "fr": "Couper le son"}};
+  var K={ja:['写真','映像'],en:['Photos','Film'],es:['Fotos','Vídeo'],fr:['Photos','Film']};
+  var lang='ja';
+  var byId={}; POSTS.forEach(function(p){byId[p.id]=p});
+  function ttl(p){return lang==='ja'?p.title:(p.route?p.title+' — '+p.route:T[p.id][lang])}
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  function renderIndex(){
+  var el=document.getElementById('v-index');
+  el.className='col list v'; el.lang=lang;
+  el.innerHTML=POSTS.map(function(p,i){
+    var img=p.images?p.images[0]:p.video.poster;
+    var kind=p.images?K[lang][0]+' '+p.images.length:K[lang][1]+' '+p.video.len;
+    var media=(p.video&&p.video.loop)
+      ? '<video class="lv" muted loop playsinline preload="none" poster="img/'+(p.video.still||img+'.webp')+'" aria-label="'+esc(ttl(p))+'">'+
+          '<source src="img/'+p.video.loop+'_av1.mp4" type=\'video/mp4; codecs="av01.0.08M.10"\'>'+
+          '<source src="img/'+p.video.loop+'_hevc.mp4" type=\'video/mp4; codecs="hvc1.2.4.L120.b0"\'></video>'
+      : '<img src="img/'+((p.video&&p.video.still)||img+'.webp')+'" alt="'+esc(ttl(p))+'"'+(i?' loading="lazy"':'')+'>';
+    return '<a class="card" href="#'+p.id+'">'+media+
+      '<span class="cap"><span class="c1"><span class="t" lang="ja">'+esc(p.title)+'</span><span class="lead" aria-hidden="true"></span><span class="pl">'+esc(p.route||T[p.id][lang==='ja'?'en':lang])+'</span></span></span></a>';
+  }).join('');
+  watch(el);
+  }
+  // 画面の中で動くのは常に1本だけ。見えている動画のうち、画面の中央にいちばん近いものだけを再生する
+  var vis=new Set(), active=null, tick=false;
+  function pick(){
+    tick=false;
+    var mid=window.innerHeight/2, best=null, bd=1e9;
+    vis.forEach(function(v){ var r=v.getBoundingClientRect(); var d=Math.abs((r.top+r.bottom)/2-mid); if(d<bd){bd=d;best=v;} });
+    if(best===active) return;
+    if(active){ active.pause(); }
+    active=best;
+    if(active){ if(active.preload==='none'){active.preload='auto';active.load();} var pr=active.play(); if(pr&&pr.catch)pr.catch(function(){}); }
+  }
+  function schedule(){ if(!tick){tick=true;requestAnimationFrame(pick);} }
+  var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting) vis.add(e.target); else { vis.delete(e.target); e.target.pause(); if(e.target===active) active=null; }
+  }); schedule(); },{threshold:.5}):null;
+  window.addEventListener('scroll',schedule,{passive:true});
+  function watch(root){ if(io) io.disconnect(); vis.clear(); active=null; root.querySelectorAll('video.lv').forEach(function(v){ if(io) io.observe(v); }); if(!io){ var f=root.querySelector('video.lv'); if(f){f.preload='auto';f.play&&f.play();} } }
+  renderIndex();
+  // 黒/白の切り替えは本人用。URL に ?dev を付けて開いたときだけ表示（?dev=off で解除）
+  (function(){ var q=location.search, on=false;
+    try{ if(/[?&]dev=off/.test(q)) localStorage.removeItem('kdev'); else if(/[?&]dev\b/.test(q)) localStorage.setItem('kdev','1'); on=localStorage.getItem('kdev')==='1'; }catch(_){ on=/[?&]dev\b/.test(q)&&!/dev=off/.test(q); }
+    if(on) document.getElementById('theme-seg').hidden=false; })();
+  document.querySelectorAll('#theme-seg button').forEach(function(b){b.addEventListener('click',function(){
+    document.documentElement.dataset.theme=b.dataset.themeSet;
+    b.parentElement.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+  })});
+  var ls=document.getElementById('lang-sel');
+  try{ var saved=localStorage.getItem('klang'); if(saved&&K[saved]&&saved!=='ja'){ lang=saved; ls.value=saved; document.documentElement.lang=saved; renderIndex(); } }catch(_){}
+  ls.addEventListener('change',function(){
+    lang=ls.value; document.documentElement.lang=lang; try{localStorage.setItem('klang',lang)}catch(_){}
+    renderIndex(); renderAbout(); if(!document.getElementById('v-post').hidden) renderPost(byId[(location.hash||'').slice(1)]);
+  });
+
+  function renderPost(p){
+    var hero=document.getElementById('p-hero'), wrap=hero.parentElement, old=wrap.querySelector('video'); if(old) old.remove();
+    hero.src='img/'+(p.images?p.images[0]:p.video.poster)+'.webp'; hero.alt=p.title; hero.hidden=false;
+    var sb=document.getElementById('p-sound'); sb.hidden=true;
+    if(p.video&&(p.video.post||p.video.loop)){ var src=p.video.post||p.video.loop; hero.hidden=true; var v=document.createElement('video'); v.className='hero-v'; v.muted=true; v.loop=true; v.autoplay=true; v.playsInline=true; v.poster='img/'+(p.video.still||p.video.poster+'.webp');
+      v.innerHTML='<source src="img/'+src+'_av1.mp4" type=\'video/mp4; codecs="av01.0.08M.10"\'><source src="img/'+src+'_hevc.mp4" type=\'video/mp4; codecs="hvc1.2.4.L120.b0"\'>';
+      wrap.insertBefore(v,hero);
+      if(p.video.post){ sb.hidden=false; sb.setAttribute('aria-pressed','false'); sb.textContent=UI.son[lang];
+        sb.onclick=function(){ v.muted=!v.muted; if(v.paused){ var pr=v.play(); if(pr&&pr.catch)pr.catch(function(){}); }
+          sb.setAttribute('aria-pressed',v.muted?'false':'true'); sb.textContent=v.muted?UI.son[lang]:UI.soff[lang]; }; } }
+    var tag=document.getElementById('p-vtag'); tag.hidden=!p.video; if(p.video) tag.textContent=K[lang][1]+' '+p.video.len;
+    document.getElementById('p-time').textContent=p.time;
+    document.getElementById('p-title').textContent=ttl(p);
+    document.getElementById('p-place').textContent=p.place;
+    var pb=document.getElementById('p-body'); pb.lang=lang; pb.innerHTML=((lang!=='ja'&&BODY[p.id]&&BODY[p.id][lang])||p.body).map(function(t,i,arr){return '<p'+(/^(［仮|\[(Draft|Borrador|Brouillon))/.test(arr[0])?' class="draft"':'')+'>'+t+'</p>'}).join('');
+    document.getElementById('p-figs').innerHTML=(p.images||[]).slice(1).map(function(k){
+      return '<figure><img src="img/'+k+'.webp" alt="" loading="lazy"></figure>'}).join('');
+    document.title=p.title+' | 観察';
+  }
+  var AJ=null;
+  function renderAbout(){
+    var a=document.getElementById('v-about'), b=a.querySelector('.body'), h=a.querySelector('h1'), pl=a.querySelector('.place');
+    if(!AJ) AJ={h:h.textContent, place:pl.textContent, body:b.innerHTML};
+    if(lang==='ja'||!ABOUT[lang]){ h.textContent=AJ.h; pl.textContent=AJ.place; b.innerHTML=AJ.body; }
+    else { var x=ABOUT[lang]; h.textContent=x.h; pl.textContent=x.place; b.innerHTML=x.p.map(function(t){return '<p>'+t+'</p>'}).join(''); }
+    b.lang=lang;
+    document.querySelectorAll('.back').forEach(function(e){e.textContent=UI.back[lang]});
+  }
+  function show(){
+    var h=(location.hash||'').slice(1), v=h==='about'?'about':byId[h]?'post':'index';
+    ['index','post','about'].forEach(function(k){document.getElementById('v-'+k).hidden=k!==v});
+    renderAbout(); if(v==='post') renderPost(byId[h]); else document.title='観察';
+    window.scrollTo(0,0);
+  }
+  // リンクは普通の #ハッシュ移動に任せる（iPhone Safari でも確実に動く）。同じハッシュを再度押したときだけ手動で表示を更新
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href^="#"]'); if(!a) return;
+    if(a.getAttribute('href')===(location.hash||'#')){ e.preventDefault(); show(); }
+  });
+  window.addEventListener('hashchange',show); show();
+})();
+</script>

@@ -1,0 +1,12 @@
+# OS / tools
+.DS_Store
+node_modules/
+dist/
+.astro/
+.netlify/
+.env*
+
+# マスター素材（リポジトリに入れない）
+*.mov
+*_master*
+teiten_*/
