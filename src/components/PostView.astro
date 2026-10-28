@@ -1,0 +1,52 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { LANGS, UI, postUrl, indexUrl, postTitle, stillOf, displayDate, excerpt, type Lang, type Post } from '../lib/i18n';
+
+interface Props { lang: Lang; post: Post }
+const { lang, post } = Astro.props;
+const d = post.ja.data;
+const { Content } = await render(post.tr);
+const title = postTitle(post, lang);
+const still = `/img/${stillOf(post)}`;
+const alternates = Object.fromEntries(LANGS.map((l) => [l, postUrl(l, post.id)])) as Record<Lang, string>;
+const AV1 = 'video/mp4; codecs="av01.0.08M.10"';
+const HEVC = 'video/mp4; codecs="hvc1.2.4.L120.b0"';
+const src = d.post ?? d.loop;
+---
+<Base lang={lang} title={`${title} | 観察`} description={excerpt(post.tr.body, lang)} ogImage={`/og/${post.id}.jpg`} ogType="article" alternates={alternates}>
+  <main class="col post">
+    <div class="hero-wrap">
+      {d.kind === 'video' && src ? (
+        <video class="hero-v" id="p-video" muted loop autoplay playsinline poster={still}>
+          <source src={`/img/${src}_av1.mp4`} type={AV1} />
+          <source src={`/img/${src}_hevc.mp4`} type={HEVC} />
+        </video>
+      ) : (
+        <img class="hero" src={still} alt={d.title} />
+      )}
+      {d.kind === 'video' && d.len && <span class="vtag">{UI.film[lang]} {d.len}</span>}
+      {d.post && <button type="button" class="snd" id="p-sound" aria-pressed="false" data-on={UI.son[lang]} data-off={UI.soff[lang]}>{UI.son[lang]}</button>}
+    </div>
+    <p class="stamp"><time datetime={d.date?.replace(' ', 'T')}>{displayDate(d.date)}</time></p>
+    <h1>{title}</h1>
+    <p class="place">{d.place}</p>
+    <div class:list={['body', { draft: d.draft }]} lang={lang}><Content /></div>
+    {d.images && d.images.length > 1 && (
+      <div class="figs">
+        {d.images.slice(1).map((k) => <figure><img src={`/img/${k}`} alt="" loading="lazy" /></figure>)}
+      </div>
+    )}
+    <a class="back" href={indexUrl(lang)}>{UI.back[lang]}</a>
+  </main>
+  <script is:inline>
+  (function(){
+    // 「音を出す」は音のオン／オフだけ。再生位置は戻さない
+    var v=document.getElementById('p-video'), sb=document.getElementById('p-sound'); if(!v||!sb) return;
+    sb.addEventListener('click',function(){
+      v.muted=!v.muted; if(v.paused){ var pr=v.play(); if(pr&&pr.catch)pr.catch(function(){}); }
+      sb.setAttribute('aria-pressed',v.muted?'false':'true'); sb.textContent=v.muted?sb.dataset.on:sb.dataset.off;
+    });
+  })();
+  </script>
+</Base>

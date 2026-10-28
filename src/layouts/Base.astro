@@ -1,0 +1,99 @@
+---
+import '../styles/site.css';
+import { LANGS, LANG_NAMES, UI, indexUrl, aboutUrl, prefix, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  ogImage?: string; // /og/xxx.jpg
+  ogType?: 'website' | 'article';
+  alternates: Record<Lang, string>; // 同じページの各言語版の URL
+}
+const { lang, title, description = UI.desc[lang], ogImage = '/og/about.jpg', ogType = 'website', alternates } = Astro.props;
+const site = Astro.site!;
+const abs = (p: string) => new URL(p, site).href;
+const canonical = abs(alternates[lang]);
+---
+<!doctype html>
+<html lang={lang} data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+{LANGS.map((l) => <link rel="alternate" hreflang={l} href={abs(alternates[l])} />)}
+<link rel="alternate" hreflang="x-default" href={abs(alternates.ja)}>
+<link rel="alternate" type="application/rss+xml" title="KANSATSU" href={abs(`${prefix(lang)}rss.xml`)}>
+<meta property="og:site_name" content="KANSATSU 観察">
+<meta property="og:type" content={ogType}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta property="og:image" content={abs(ogImage)}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content={{ ja: 'ja_JP', en: 'en_US', es: 'es_ES', fr: 'fr_FR' }[lang]}>
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Zen+Antique&display=swap">
+<script is:inline>
+  // 言語を保存してある人がトップ（/）に来たら、その言語のトップへ
+  try { var s = localStorage.getItem('klang'); if (location.pathname === '/' && s && s !== 'ja' && /^(en|es|fr)$/.test(s)) location.replace('/' + s + '/'); } catch (_) {}
+</script>
+</head>
+<body>
+<header class="hdr">
+  <div class="in">
+    <div class="left">
+      <a class="logo" href={indexUrl(lang)}><span class="w">KANSATSU</span><small>観察</small></a>
+    </div>
+    <div class="ctrl">
+      <label class="lang"><span class="sr">Language</span>
+        <select id="lang-sel" aria-label="Language">
+          {LANGS.map((l) => <option value={l} data-href={alternates[l]} selected={l === lang}>{LANG_NAMES[l]}</option>)}
+        </select>
+      </label>
+      <div class="seg" role="group" aria-label="背景（比較用）" id="theme-seg" hidden><button type="button" data-theme-set="dark" aria-pressed="false">黒</button><button type="button" data-theme-set="light" aria-pressed="true">白</button></div>
+      <a class="pill" href={aboutUrl(lang)}>About</a>
+    </div>
+  </div>
+</header>
+
+<slot />
+
+<footer class="foot">
+  <div class="col">
+    <span>© 2026 KANSATSU</span>
+    <a href={`${prefix(lang)}rss.xml`}>RSS Feed</a>
+  </div>
+</footer>
+
+<nav class="sr" aria-label="Language">
+  {LANGS.filter((l) => l !== lang).map((l) => <a href={alternates[l]} hreflang={l} lang={l}>{LANG_NAMES[l]}</a>)}
+</nav>
+
+<script is:inline>
+(function(){
+  // 言語の切り替え：選んだ言語を保存して、同じページのその言語版へ移動
+  var ls=document.getElementById('lang-sel');
+  ls.addEventListener('change',function(){
+    var o=ls.options[ls.selectedIndex];
+    try{localStorage.setItem('klang',o.value)}catch(_){}
+    location.href=o.dataset.href;
+  });
+  // 黒/白の切り替えは本人用。URL に ?dev を付けて開いたときだけ表示（?dev=off で解除）
+  var q=location.search, on=false;
+  try{ if(/[?&]dev=off/.test(q)) localStorage.removeItem('kdev'); else if(/[?&]dev\b/.test(q)) localStorage.setItem('kdev','1'); on=localStorage.getItem('kdev')==='1'; }catch(_){ on=/[?&]dev\b/.test(q)&&!/dev=off/.test(q); }
+  var seg=document.getElementById('theme-seg');
+  if(on) seg.hidden=false;
+  var th; try{th=sessionStorage.getItem('ktheme')}catch(_){}
+  function setTheme(t){ document.documentElement.dataset.theme=t; seg.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x.dataset.themeSet===t?'true':'false')}); }
+  if(on&&th) setTheme(th);
+  seg.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){ setTheme(b.dataset.themeSet); try{sessionStorage.setItem('ktheme',b.dataset.themeSet)}catch(_){} })});
+})();
+</script>
+</body>
+</html>

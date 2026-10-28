@@ -1,0 +1,9 @@
+---
+import PostView from '../../components/PostView.astro';
+import { getPosts } from '../../lib/i18n';
+
+export async function getStaticPaths() {
+  return (await getPosts('ja')).map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+---
+<PostView lang="ja" post={Astro.props.post} />

@@ -1,0 +1,13 @@
+---
+import PostView from '../../../components/PostView.astro';
+import { OTHER_LANGS, getPosts, type Lang } from '../../../lib/i18n';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of OTHER_LANGS) {
+    for (const post of await getPosts(lang)) paths.push({ params: { lang, id: post.id }, props: { post } });
+  }
+  return paths;
+}
+---
+<PostView lang={Astro.params.lang as Lang} post={Astro.props.post} />

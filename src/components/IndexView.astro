@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import { LANGS, UI, getPosts, postUrl, indexUrl, captionSub, stillOf, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const posts = await getPosts(lang);
+const cards = await Promise.all(posts.map(async (p) => ({ p, sub: await captionSub(p, lang) })));
+const alternates = Object.fromEntries(LANGS.map((l) => [l, indexUrl(l)])) as Record<Lang, string>;
+const AV1 = 'video/mp4; codecs="av01.0.08M.10"';
+const HEVC = 'video/mp4; codecs="hvc1.2.4.L120.b0"';
+---
+<Base lang={lang} title="観察 | KANSATSU" alternates={alternates}>
+  <main class="col list v" aria-label={UI.list[lang]} lang={lang}>
+    {cards.map(({ p, sub }, i) => {
+      const d = p.ja.data;
+      const still = `/img/${stillOf(p)}`;
+      // 固定カメラの動画はループで動かす。移動・POV と写真は静止画
+      const animate = d.kind === 'video' && d.loop && !d.moving;
+      return (
+        <a class="card" href={postUrl(lang, p.id)}>
+          {animate ? (
+            <video class="lv" muted loop playsinline preload="none" poster={still} aria-label={d.title}>
+              <source src={`/img/${d.loop}_av1.mp4`} type={AV1} />
+              <source src={`/img/${d.loop}_hevc.mp4`} type={HEVC} />
+            </video>
+          ) : (
+            <img src={still} alt={d.title} loading={i ? 'lazy' : undefined} />
+          )}
+          <span class="cap"><span class="c1"><span class="t" lang="ja">{d.title}</span><span class="lead" aria-hidden="true"></span><span class="pl">{sub}</span></span></span>
+        </a>
+      );
+    })}
+  </main>
+  <script is:inline>
+  (function(){
+    // 画面の中で動くのは常に1本だけ。半分以上見えている動画のうち、画面の中央にいちばん近いものだけを再生する
+    var vis=new Set(), active=null, tick=false;
+    function pick(){
+      tick=false;
+      var mid=window.innerHeight/2, best=null, bd=1e9;
+      vis.forEach(function(v){ var r=v.getBoundingClientRect(); var d=Math.abs((r.top+r.bottom)/2-mid); if(d<bd){bd=d;best=v;} });
+      if(best===active) return;
+      if(active){ active.pause(); }
+      active=best;
+      if(active){ if(active.preload==='none'){active.preload='auto';active.load();} var pr=active.play(); if(pr&&pr.catch)pr.catch(function(){}); }
+    }
+    function schedule(){ if(!tick){tick=true;requestAnimationFrame(pick);} }
+    var vids=document.querySelectorAll('video.lv');
+    if(!('IntersectionObserver' in window)){ var f=vids[0]; if(f){f.preload='auto';f.play&&f.play();} return; }
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting) vis.add(e.target); else { vis.delete(e.target); e.target.pause(); if(e.target===active) active=null; }
+    }); schedule(); },{threshold:.5});
+    window.addEventListener('scroll',schedule,{passive:true});
+    vids.forEach(function(v){ io.observe(v); });
+    // 戻るボタンでキャッシュから復帰したとき、止まった動画を再開する
+    window.addEventListener('pageshow',function(e){ if(e.persisted){ active=null; schedule(); } });
+  })();
+  </script>
+</Base>
