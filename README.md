@@ -7,7 +7,6 @@ Astro で作る静的サイト。`npm run dev` で http://localhost:4321/ に表
 |---|---|---|
 | トップ | `/` | `/en/` `/es/` `/fr/` |
 | 投稿 | `/posts/{id}/` | `/en/posts/{id}/` |
-| About | `/about/` | `/en/about/` |
 | RSS | `/rss.xml` | `/en/rss.xml` |
 
 ## 投稿を書く

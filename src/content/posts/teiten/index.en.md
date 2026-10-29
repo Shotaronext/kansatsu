@@ -1,7 +1,5 @@
 ---
 title: "Fixed Point"
-place: "Shotaro Kondo　Filmmaker & Photographer　Dubai"
-stamp: "Côte d'Azur"
 ---
 
 To stop, and keep looking at one thing.

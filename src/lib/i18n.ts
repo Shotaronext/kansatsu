@@ -23,7 +23,6 @@ export const UI = {
 export const prefix = (lang: Lang) => (lang === 'ja' ? '/' : `/${lang}/`);
 export const indexUrl = (lang: Lang) => prefix(lang);
 export const postUrl = (lang: Lang, id: string) => `${prefix(lang)}posts/${id}/`;
-export const aboutUrl = (lang: Lang) => `${prefix(lang)}about/`;
 
 export type Post = {
   id: string;

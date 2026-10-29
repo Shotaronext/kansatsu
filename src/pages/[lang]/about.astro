@@ -1,7 +1,0 @@
----
-import AboutView from '../../components/AboutView.astro';
-import { OTHER_LANGS, type Lang } from '../../lib/i18n';
-
-export const getStaticPaths = () => OTHER_LANGS.map((lang) => ({ params: { lang } }));
----
-<AboutView lang={Astro.params.lang as Lang} />

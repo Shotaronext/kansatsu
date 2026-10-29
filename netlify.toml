@@ -4,3 +4,14 @@
 
 [build.environment]
   NODE_VERSION = "24"
+
+# About ページは記事「定点」になった
+[[redirects]]
+  from = "/about/"
+  to = "/posts/teiten/"
+  status = 301
+
+[[redirects]]
+  from = "/:lang/about/"
+  to = "/:lang/posts/teiten/"
+  status = 301

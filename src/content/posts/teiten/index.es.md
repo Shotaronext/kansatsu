@@ -1,7 +1,5 @@
 ---
 title: "Punto fijo"
-place: "Shotaro Kondo　Cineasta y fotógrafo　Dubái"
-stamp: "Côte d'Azur"
 ---
 
 Detenerme y mirar una sola cosa durante mucho tiempo.

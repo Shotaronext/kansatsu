@@ -1,7 +1,5 @@
 ---
 title: "Point fixe"
-place: "Shotaro Kondo　Réalisateur et photographe　Dubaï"
-stamp: "Côte d'Azur"
 ---
 
 M'arrêter, et regarder longtemps une seule chose.

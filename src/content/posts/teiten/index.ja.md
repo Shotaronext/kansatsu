@@ -1,7 +1,9 @@
 ---
 title: "定点"
-place: "Shotaro Kondo　映像作家・写真家　Dubai"
-stamp: "Côte d'Azur"
+date: "2026-10-01 16:20"
+place: "Côte d'Azur"
+kind: photos
+images: ["train.webp"]
 ---
 
 立ち止まって、ひとつのものをずっと見つめる。

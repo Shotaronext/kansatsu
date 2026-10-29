@@ -1,6 +1,6 @@
 ---
 import '../styles/site.css';
-import { LANGS, LANG_NAMES, UI, indexUrl, aboutUrl, prefix, type Lang } from '../lib/i18n';
+import { LANGS, LANG_NAMES, UI, indexUrl, prefix, type Lang } from '../lib/i18n';
 
 interface Props {
   lang: Lang;
@@ -10,7 +10,9 @@ interface Props {
   ogType?: 'website' | 'article';
   alternates: Record<Lang, string>; // 同じページの各言語版の URL
 }
-const { lang, title, description = UI.desc[lang], ogImage = '/og/about.jpg', ogType = 'website', alternates } = Astro.props;
+// フッターに出す連絡先。空のあいだは表示しない
+const CONTACT = '';
+const { lang, title, description = UI.desc[lang], ogImage = '/og/teiten.jpg', ogType = 'website', alternates } = Astro.props;
 const site = Astro.site!;
 const abs = (p: string) => new URL(p, site).href;
 const canonical = abs(alternates[lang]);
@@ -57,7 +59,6 @@ const canonical = abs(alternates[lang]);
         </select>
       </label>
       <div class="seg" role="group" aria-label="背景（比較用）" id="theme-seg" hidden><button type="button" data-theme-set="dark" aria-pressed="false">黒</button><button type="button" data-theme-set="light" aria-pressed="true">白</button></div>
-      <a class="pill" href={aboutUrl(lang)}>About</a>
     </div>
   </div>
 </header>
@@ -67,6 +68,7 @@ const canonical = abs(alternates[lang]);
 <footer class="foot">
   <div class="col">
     <span>© 2026 KANSATSU</span>
+    {CONTACT && <a href={`mailto:${CONTACT}`}>{CONTACT}</a>}
     <a href={`${prefix(lang)}rss.xml`}>RSS Feed</a>
   </div>
 </footer>
