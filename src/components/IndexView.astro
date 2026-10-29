@@ -10,16 +10,20 @@ const alternates = Object.fromEntries(LANGS.map((l) => [l, indexUrl(l)])) as Rec
 const AV1 = 'video/mp4; codecs="av01.0.08M.10"';
 const HEVC = 'video/mp4; codecs="hvc1.2.4.L120.b0"';
 ---
-<Base lang={lang} title="観察 | KANSATSU" alternates={alternates}>
+<Base lang={lang} title="SHOTARONEXT" alternates={alternates}>
   <main class="col list v" aria-label={UI.list[lang]} lang={lang}>
     {cards.map(({ p, sub }, i) => {
       const d = p.ja.data;
-      const still = `/img/${stillOf(p)}`;
+      const still = stillOf(p) && `/img/${stillOf(p)}`;
+      // 画像のない回（文章だけ）は、本文の1行目をカードに置く
+      const first = still ? '' : (p.tr.body ?? '').trim().split('\n')[0];
       // 固定カメラの動画はループで動かす。移動・POV と写真は静止画
       const animate = d.kind === 'video' && d.loop && !d.moving;
       return (
-        <a class="card" href={postUrl(lang, p.id)}>
-          {animate ? (
+        <a class:list={['card', { text: !still }]} href={postUrl(lang, p.id)}>
+          {!still ? (
+            <span class="first" lang={lang}>{first}</span>
+          ) : animate ? (
             <video class="lv" muted loop playsinline preload="none" poster={still} aria-label={d.title}>
               <source src={`/img/${d.loop}_av1.mp4`} type={AV1} />
               <source src={`/img/${d.loop}_hevc.mp4`} type={HEVC} />

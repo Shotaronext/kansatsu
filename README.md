@@ -1,4 +1,4 @@
-# 観察 / KANSATSU
+# SHOTARONEXT
 
 Astro で作る静的サイト。`npm run dev` で http://localhost:4321/ に表示、`npm run build` で `dist/` に書き出す。
 

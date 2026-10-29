@@ -3,7 +3,6 @@ title: "定点"
 date: "2026-10-01 16:20"
 place: "Côte d'Azur"
 kind: photos
-images: ["train.webp"]
 ---
 
 立ち止まって、ひとつのものをずっと見つめる。

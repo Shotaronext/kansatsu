@@ -6,7 +6,7 @@ import { UI, getPosts, postTitle, postUrl, prefix, excerpt, type Lang } from './
 export async function feed(lang: Lang, context: APIContext) {
   const posts = await getPosts(lang);
   return rss({
-    title: lang === 'ja' ? '観察 | KANSATSU' : 'KANSATSU',
+    title: 'SHOTARONEXT',
     description: UI.desc[lang],
     site: new URL(prefix(lang), context.site).href,
     items: posts.map((p) => ({

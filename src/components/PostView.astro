@@ -8,15 +8,15 @@ const { lang, post } = Astro.props;
 const d = post.ja.data;
 const { Content } = await render(post.tr);
 const title = postTitle(post, lang);
-const still = `/img/${stillOf(post)}`;
+const still = stillOf(post) && `/img/${stillOf(post)}`;
 const alternates = Object.fromEntries(LANGS.map((l) => [l, postUrl(l, post.id)])) as Record<Lang, string>;
 const AV1 = 'video/mp4; codecs="av01.0.08M.10"';
 const HEVC = 'video/mp4; codecs="hvc1.2.4.L120.b0"';
 const src = d.post ?? d.loop;
 ---
-<Base lang={lang} title={`${title} | 観察`} description={excerpt(post.tr.body, lang)} ogImage={`/og/${post.id}.jpg`} ogType="article" alternates={alternates}>
+<Base lang={lang} title={`${title} | SHOTARONEXT`} description={excerpt(post.tr.body, lang)} ogImage={still ? `/og/${post.id}.jpg` : undefined} ogType="article" alternates={alternates}>
   <main class="col post">
-    <div class="hero-wrap">
+    {still && <div class="hero-wrap">
       {d.kind === 'video' && src ? (
         <video class="hero-v" id="p-video" muted loop autoplay playsinline poster={still}>
           <source src={`/img/${src}_av1.mp4`} type={AV1} />
@@ -27,7 +27,7 @@ const src = d.post ?? d.loop;
       )}
       {d.kind === 'video' && d.len && <span class="vtag">{UI.film[lang]} {d.len}</span>}
       {d.post && <button type="button" class="snd" id="p-sound" aria-pressed="false" data-on={UI.son[lang]} data-off={UI.soff[lang]}>{UI.son[lang]}</button>}
-    </div>
+    </div>}
     <p class="stamp"><time datetime={d.date?.replace(' ', 'T')}>{displayDate(d.date)}</time></p>
     <h1>{title}</h1>
     <p class="place">{d.place}</p>

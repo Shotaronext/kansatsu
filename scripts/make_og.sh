@@ -21,7 +21,7 @@ if [ "${1:-}" = "--all" ]; then
     # still があればそれ、なければ images の1枚目
     img=$(sed -n 's/^still: *"\(.*\)"/\1/p' "$f")
     [ -z "$img" ] && img=$(sed -n 's/^images: *\["\([^"]*\)".*/\1/p' "$f")
-    og "public/img/$img" "$id"
+    [ -n "$img" ] && og "public/img/$img" "$id"  # 画像のない回は作らない
   done
 else
   og "$1" "$2"

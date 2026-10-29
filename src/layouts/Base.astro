@@ -11,8 +11,8 @@ interface Props {
   alternates: Record<Lang, string>; // 同じページの各言語版の URL
 }
 // フッターに出す連絡先。空のあいだは表示しない
-const CONTACT = '';
-const { lang, title, description = UI.desc[lang], ogImage = '/og/teiten.jpg', ogType = 'website', alternates } = Astro.props;
+const CONTACT = 'shotaronext@gmail.com';
+const { lang, title, description = UI.desc[lang], ogImage = '/og/creperie.jpg', ogType = 'website', alternates } = Astro.props;
 const site = Astro.site!;
 const abs = (p: string) => new URL(p, site).href;
 const canonical = abs(alternates[lang]);
@@ -27,8 +27,8 @@ const canonical = abs(alternates[lang]);
 <link rel="canonical" href={canonical}>
 {LANGS.map((l) => <link rel="alternate" hreflang={l} href={abs(alternates[l])} />)}
 <link rel="alternate" hreflang="x-default" href={abs(alternates.ja)}>
-<link rel="alternate" type="application/rss+xml" title="KANSATSU" href={abs(`${prefix(lang)}rss.xml`)}>
-<meta property="og:site_name" content="KANSATSU 観察">
+<link rel="alternate" type="application/rss+xml" title="SHOTARONEXT" href={abs(`${prefix(lang)}rss.xml`)}>
+<meta property="og:site_name" content="SHOTARONEXT">
 <meta property="og:type" content={ogType}>
 <meta property="og:title" content={title}>
 <meta property="og:description" content={description}>
@@ -50,7 +50,7 @@ const canonical = abs(alternates[lang]);
 <header class="hdr">
   <div class="in">
     <div class="left">
-      <a class="logo" href={indexUrl(lang)}><span class="w">KANSATSU</span><small>観察</small></a>
+      <a class="logo" href={indexUrl(lang)}><span class="w">SHOTARO<b>NEXT</b></span></a>
     </div>
     <div class="ctrl">
       <label class="lang"><span class="sr">Language</span>
@@ -67,7 +67,7 @@ const canonical = abs(alternates[lang]);
 
 <footer class="foot">
   <div class="col">
-    <span>© 2026 KANSATSU</span>
+    <span>© 2026 SHOTARONEXT</span>
     {CONTACT && <a href={`mailto:${CONTACT}`}>{CONTACT}</a>}
     <a href={`${prefix(lang)}rss.xml`}>RSS Feed</a>
   </div>
