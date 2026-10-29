@@ -5,6 +5,13 @@
 [build.environment]
   NODE_VERSION = "24"
 
+# 前の住所（netlify.app）は独自ドメインへ
+[[redirects]]
+  from = "https://friendly-daffodil-06efc0.netlify.app/*"
+  to = "https://shotaronext.com/:splat"
+  status = 301
+  force = true
+
 # About ページは記事「定点」になった
 [[redirects]]
   from = "/about/"
