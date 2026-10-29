@@ -1,9 +1,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// 独自ドメインが決まったら site を差し替える
 export default defineConfig({
-  site: 'https://friendly-daffodil-06efc0.netlify.app',
+  site: 'https://shotaronext.com',
   trailingSlash: 'always',
   integrations: [
     sitemap({
