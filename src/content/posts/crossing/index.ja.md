@@ -5,6 +5,7 @@ place: "Paris — Porte de Versailles"
 kind: photos
 images: ["versailles.webp", "avenue.webp", "cafe.webp"]
 draft: true
+hidden: true
 ---
 
 ［仮の本文］曇り空の夕方。

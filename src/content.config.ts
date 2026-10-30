@@ -23,6 +23,7 @@ const posts = defineCollection({
     len: z.string().optional(),
     moving: z.boolean().optional(), // 移動・POV（サムネは静止画）
     draft: z.boolean().optional(), // 仮の本文（薄く表示）
+    hidden: z.boolean().optional(), // 非公開（一覧・ページ・RSS・サイトマップに出さない）
   }),
 });
 

@@ -15,10 +15,10 @@
 # About ページは記事「定点」になった
 [[redirects]]
   from = "/about/"
-  to = "/posts/teiten/"
+  to = "/"  # 「定点」を非公開にしているあいだはトップへ。戻したら /posts/teiten/ に
   status = 301
 
 [[redirects]]
   from = "/:lang/about/"
-  to = "/:lang/posts/teiten/"
+  to = "/:lang/"
   status = 301

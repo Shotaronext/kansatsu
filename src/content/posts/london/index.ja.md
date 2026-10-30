@@ -8,6 +8,7 @@ post: "london_post"
 still: "london_poster.avif"
 len: "0:38"
 moving: true
+hidden: true
 ---
 
 僕は仕事仲間のレンドゥルに、こんな質問をした。

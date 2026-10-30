@@ -35,7 +35,7 @@ export async function getPosts(lang: Lang): Promise<Post[]> {
   const all = await getCollection('posts');
   const byId = new Map(all.map((e) => [e.id, e]));
   return all
-    .filter((e) => e.id.endsWith('/ja'))
+    .filter((e) => e.id.endsWith('/ja') && !e.data.hidden)
     .map((ja) => {
       const id = ja.id.split('/')[0];
       return { id, ja, tr: byId.get(`${id}/${lang}`) ?? ja };

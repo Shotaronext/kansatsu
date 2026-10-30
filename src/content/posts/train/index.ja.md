@@ -7,6 +7,7 @@ kind: video
 still: "train.webp"
 len: "22:00"
 draft: true
+hidden: true
 ---
 
 ［仮の本文］窓際の席にカメラを固定した。
