@@ -24,6 +24,9 @@
   nav ul{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0;padding:0;list-style:none}
   nav a{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding-bottom:3px;border-bottom:1px solid transparent;transition:border-color .2s}
   nav a:hover{border-bottom-color:var(--ink)}
+  .back{display:inline-block;margin-top:20px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--ink);transition:background .2s,color .2s}
+  .back:hover{background:var(--ink);color:var(--bg)}
+  header{padding-top:clamp(28px,5vw,48px)!important}
   .intro{margin:28px 0 0;max-width:56ch;font-size:15px}
 
   section{padding-top:clamp(72px,10vw,112px);scroll-margin-top:24px}
@@ -72,6 +75,7 @@
 </head>
 <body>
 <div class="wrap">
+  <a class="back" href="/">← shotaronext.com</a>
   <header>
     <h1 class="mark">SHOTARO KONDO<small>SELECTED WORKS · CONCEPT · SHOOT · EDIT</small></h1>
     <nav aria-label="Sections">

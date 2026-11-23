@@ -23,6 +23,8 @@ p{margin:0;color:#888;font-size:13px}
 input{font:inherit;padding:10px 12px;background:#111;color:#eee;border:1px solid #333;border-radius:2px}
 button{font:inherit;padding:10px 12px;background:#eee;color:#000;border:0;border-radius:2px;cursor:pointer}
 .err{color:#e07a6a}
+.back{color:#888;font-size:13px;text-decoration:none;margin-top:6px}
+.back:hover{color:#eee}
 </style></head><body>
 <form method="POST">
 <h1>SHOTARONEXT</h1>
@@ -30,6 +32,7 @@ button{font:inherit;padding:10px 12px;background:#eee;color:#000;border:0;border
 <input type="password" name="password" autocomplete="current-password" autofocus aria-label="Password" required>
 ${wrong ? '<p class="err">That password is not right.</p>' : ""}
 <button type="submit">Enter</button>
+<a class="back" href="/">← Back to shotaronext.com</a>
 </form></body></html>`;
   return new Response(html, {
     status: wrong ? 401 : 200,
