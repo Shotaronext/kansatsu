@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Shotaro Kondo — Selected Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..700&display=swap">
+<style>
+  :root{--bg:#fbfbf9;--ink:#141414;--grey:#858580;--rule:#dcdcd6;--tile:#efefeb;--font:"Archivo","Helvetica Neue",Arial,sans-serif}
+  *{box-sizing:border-box}
+  html{scroll-padding-top:env(safe-area-inset-top,0px)}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.6;
+    padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px))}
+  a{color:inherit;text-decoration:none}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  .wrap{max-width:1040px;margin:0 auto;padding-bottom:48px}
+
+  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:20px 32px;padding-block:clamp(40px,7vw,72px) 18px;border-bottom:1px solid var(--ink)}
+  .mark{margin:0;font-size:clamp(24px,4vw,38px);font-weight:300;font-stretch:125%;letter-spacing:.06em;line-height:1}
+  .mark small{display:block;margin-top:12px;font-size:11px;font-weight:500;font-stretch:100%;letter-spacing:.2em;color:var(--grey)}
+  nav ul{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0;padding:0;list-style:none}
+  nav a{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding-bottom:3px;border-bottom:1px solid transparent;transition:border-color .2s}
+  nav a:hover{border-bottom-color:var(--ink)}
+  .intro{margin:28px 0 0;max-width:56ch;font-size:15px}
+
+  section{padding-top:clamp(72px,10vw,112px);scroll-margin-top:24px}
+  .head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px 24px;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+  .head .tab{font-size:clamp(20px,2.6vw,28px);font-weight:600;font-stretch:112%;line-height:1.15;margin:0}
+  .head p{grid-column:1;margin:0;color:var(--grey);font-size:13px;max-width:56ch}
+  .head .ig{grid-column:2;grid-row:1;font-size:11px;font-weight:600;letter-spacing:.16em;border-bottom:1px solid var(--ink)}
+
+  .grid{display:grid;gap:6px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tile{display:block;position:relative;overflow:hidden;background:var(--tile);aspect-ratio:9/16;width:100%;border:0;padding:0;margin:0;cursor:pointer;color:inherit;font:inherit}
+  .tile img,.tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:opacity .3s}
+  a.tile:hover img{opacity:.82}
+  .t{position:absolute;left:0;right:0;bottom:0;padding:28px 12px 10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#fff;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.55));opacity:0;transition:opacity .3s;pointer-events:none}
+  .tile:hover .t,.tile:focus-visible .t{opacity:1}
+  @media (hover:none){.t{opacity:1}}
+  .chip{position:absolute;right:8px;top:8px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#fff;background:rgba(0,0,0,.45);padding:5px 8px;border-radius:999px;pointer-events:none}
+  .cap{margin-top:8px;display:flex;flex-direction:column}
+  .cap b{font-size:13px;font-weight:600}
+  .cap span{font-size:12px;color:var(--grey)}
+  .item{min-width:0}
+
+  .wide .tile{aspect-ratio:16/9}
+  .stack{display:grid;gap:28px}
+  .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .sq .tile{aspect-ratio:4/5}
+  .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .solo{display:grid;grid-template-columns:minmax(0,340px)}
+
+  .feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;max-width:620px}
+  .feed img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--tile)}
+
+  .contact{margin-top:clamp(88px,11vw,128px);border-top:1px solid var(--ink);padding-top:24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px}
+  .contact h2{margin:0;font-weight:300;font-stretch:125%;font-size:clamp(22px,3.4vw,34px);line-height:1.2;letter-spacing:.04em}
+  .contact p{margin:0;align-self:end;font-size:14px}
+  .contact p span{display:block;color:var(--grey);font-size:12px}
+  footer{color:var(--grey);font-size:11px;letter-spacing:.1em;padding-top:40px}
+
+  @media (max-width:560px){
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .pair{grid-template-columns:minmax(0,1fr)}
+    .head{grid-template-columns:1fr}
+    .head .ig{grid-column:1;grid-row:auto;justify-self:start}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="mark">SHOTARO KONDO<small>SELECTED WORKS · CONCEPT · SHOOT · EDIT</small></h1>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#kokoro">Kokoro</a></li>
+        <li><a href="#films">Films</a></li>
+        <li><a href="#dubai">Dubai</a></li>
+        <li><a href="#japan">Japan</a></li>
+        <li><a href="#photo">Photography</a></li>
+        <li><a href="#setian">Setian</a></li>
+      </ul>
+    </nav>
+  </header>
+  <p class="intro">Director, cinematographer and editor based in Dubai. Food, hospitality, jewellery and documentary — from the idea to the final cut. Not the product alone, but the story around it.</p>
+
+  <section id="kokoro">
+    <div class="head">
+      <h2 class="tab">Kokoro Hand Roll Bar</h2>
+      <p>Ongoing, Dubai and Cannes. All video for the brand, from idea to final cut.</p>
+      <a class="ig" href="https://www.instagram.com/kokoro.dxb/" target="_blank" rel="noopener">@KOKORO.DXB</a>
+    </div>
+    <div class="grid">
+      <a class="tile" href="https://www.instagram.com/kokoro.dxb/reel/DcgJVPRoKmg/" target="_blank" rel="noopener"><img src="img/sbf1.jpg" alt="Two Kokoro storefronts: Même amour, villes différentes" loading="lazy"><span class="t">You can't copy Kokoro</span></a>
+      <a class="tile" href="https://www.instagram.com/kokoroom.handrolls/reel/DbdY-0-Ir_Q/" target="_blank" rel="noopener"><img src="img/sbf2.jpg" alt="Kokoro server in a full dining room" loading="lazy"><span class="t">Just four walls</span></a>
+      <button class="tile play" type="button" aria-label="Kokoro Meditation reel. Tap for sound"><video class="lv" muted loop playsinline preload="none" poster="img/v_meditation.jpg" src="vid/meditation.mp4"></video><span class="chip">Sound on</span><span class="t">Meditation · 2,238 likes</span></button>
+      <a class="tile" href="https://www.instagram.com/kokoro.dxb/reel/DcN4paHo3gU/" target="_blank" rel="noopener"><img src="img/sbf4.jpg" alt="Kokoro reel: Kokoroholics" loading="lazy"><span class="t">Kokoroholics</span></a>
+      <a class="tile" href="https://www.instagram.com/kokoroom.handrolls/reel/DbqL5WSt4TW/" target="_blank" rel="noopener"><img src="img/sbf5.jpg" alt="Kokoro Cannes reel: Watch and learn" loading="lazy"><span class="t">Cannes — Watch and learn</span></a>
+      <a class="tile" href="https://www.instagram.com/kokoro.dxb/reel/DUV3pTgCFM_/" target="_blank" rel="noopener"><img src="img/sbf6.jpg" alt="Kokoro reel: No.15 in MENA's 50 Best" loading="lazy"><span class="t">MENA's 50 Best</span></a>
+    </div>
+  </section>
+
+  <section id="films">
+    <div class="head">
+      <h2 class="tab">Brand Films</h2>
+      <p>Short films with a story to tell. Tap a film for sound.</p>
+    </div>
+    <div class="grid">
+      <div class="item">
+        <button class="tile play" type="button" aria-label="Kokoro × Arts Club film. Tap for sound"><video class="lv" muted loop playsinline preload="none" poster="img/v_artsclub.jpg" src="vid/artsclub.mp4"></video><span class="chip">Sound on</span></button>
+        <div class="cap"><b>Kokoro × Arts Club</b><span>Dubai</span></div>
+      </div>
+      <div class="item">
+        <button class="tile play" type="button" aria-label="MURIA Jewellery, The Calling. Tap for sound"><video class="lv" muted loop playsinline preload="none" poster="img/v_muria.jpg" src="vid/muria.mp4"></video><span class="chip">Sound on</span></button>
+        <div class="cap"><b>MURIA Jewellery</b><span>The Calling · shot in Oman</span></div>
+      </div>
+      <div class="item">
+        <button class="tile play" type="button" aria-label="Rasheh, The Mamas. Tap for sound"><video class="lv" muted loop playsinline preload="none" poster="img/v_rasheh.jpg" src="vid/rasheh.mp4"></video><span class="chip">Sound on</span></button>
+        <div class="cap"><b>Rasheh</b><span>The Mamas · 1:47</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dubai">
+    <div class="head">
+      <h2 class="tab">Dubai</h2>
+      <p>Openings, launches, everyday content for restaurants and cafés — and live events.</p>
+    </div>
+    <div class="grid g4">
+      <div class="item">
+        <a class="tile" href="https://www.instagram.com/window.dxb/reel/DfK2M5Uxoy4/" target="_blank" rel="noopener"><img src="img/window_dayone.jpg" alt="WINDOW reel: Day 1 at Alserkal Avenue" loading="lazy"><span class="chip">Reel ↗</span></a>
+        <div class="cap"><b>WINDOW</b><span>Day 1 — What the food! · Alserkal Avenue</span></div>
+      </div>
+      <div class="item">
+        <a class="tile" href="https://www.instagram.com/hikiniku.to.come_dxb/reel/DeOrh1TKMA-/" target="_blank" rel="noopener"><img src="img/DeOrh1TKMA-.jpg" alt="Hikiniku To Come reel" loading="lazy"><span class="chip">Reel ↗</span></a>
+        <div class="cap"><b>Hikiniku To Come</b><span>Dubai opening · 936 likes</span></div>
+      </div>
+      <div class="item">
+        <a class="tile" href="https://www.instagram.com/p/Dci35AlMsd6/" target="_blank" rel="noopener"><img src="img/Dci35AlMsd6.jpg" alt="Bake My Day storefront" loading="lazy"><span class="chip">Post ↗</span></a>
+        <div class="cap"><b>Bake My Day</b><span>Dubai · 2,985 likes</span></div>
+      </div>
+      <div class="item">
+        <a class="tile" href="https://www.instagram.com/thenimimehta/reel/Df7zCp-IAi1/" target="_blank" rel="noopener"><img src="img/nimi_fight.jpg" alt="Nimi Mehta fight night reel" loading="lazy"><span class="chip">Reel ↗</span></a>
+        <div class="cap"><b>Nimi Mehta</b><span>Fight night · live sport</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="japan">
+    <div class="head">
+      <h2 class="tab">Japan</h2>
+      <p>Earlier work from five years in Tokyo: documentary, event film and food.</p>
+    </div>
+    <div class="stack">
+      <div class="item wide">
+        <a class="tile" href="https://www.youtube.com/watch?v=SH8OCEj1Auc" target="_blank" rel="noopener"><img src="img/kuni.jpg" alt="KUNI 2024: people walking a snowy shrine approach" loading="lazy"><span class="chip">YouTube ↗</span></a>
+        <div class="cap"><b>KUNI 2024</b><span>KOTOWARI · Japan</span></div>
+      </div>
+      <div class="item wide">
+        <a class="tile" href="https://vimeo.com/637779928/4a73b6c9bc" target="_blank" rel="noopener"><img src="img/sbf8.jpg" alt="Dairy farmer in a Hokkaido field" loading="lazy"><span class="chip">Vimeo ↗</span></a>
+        <div class="cap"><b>Misawa Farm</b><span>Short documentary on milk in Hokkaido · 3:08</span></div>
+      </div>
+      <div class="item solo">
+        <div>
+          <a class="tile" href="https://www.instagram.com/reel/DX_XqpXRS-N/" target="_blank" rel="noopener"><img src="img/sbf7.jpg" alt="Fork twirling spaghetti at L'Ombelico" loading="lazy"><span class="chip">Reel ↗</span></a>
+          <div class="cap"><b>L'Ombelico</b><span>Food film · TRUNK(HOTEL) Yoyogi Park, Tokyo</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="photo">
+    <div class="head">
+      <h2 class="tab">Photography</h2>
+      <p>Restaurant stories for American Express Japan (Fukuoka, Kyoto) and event photography for the TABASCO® Neo Fes launch in Tokyo.</p>
+    </div>
+    <div class="grid sq">
+      <div class="item"><a class="tile" href="https://www.instagram.com/amexjp/p/DTkHDvZE1po/?img_index=1" target="_blank" rel="noopener"><img src="img/sbf102.jpg" alt="Chef throwing salt over fish roasting at the Musashiza hearth" loading="lazy"></a><div class="cap"><b>American Express</b><span>Musashiza · Fukuoka</span></div></div>
+      <div class="item"><a class="tile" href="https://www.instagram.com/p/DTucyhUk2tq/?img_index=6" target="_blank" rel="noopener"><img src="img/sbf103.jpg" alt="Tea poured beside the copper kettle at Yorozu" loading="lazy"></a><div class="cap"><b>American Express</b><span>Yorozu · Fukuoka</span></div></div>
+      <div class="item"><a class="tile" href="https://www.instagram.com/p/DD_qjY_y0Fo/?img_index=5" target="_blank" rel="noopener"><img src="img/sbf201.jpg" alt="Latte beside autumn leaves in Kyoto" loading="lazy"></a><div class="cap"><b>American Express</b><span>Coffee · Kyoto</span></div></div>
+      <div class="item"><a class="tile" href="https://www.instagram.com/tabascojapan/p/Ck-dnEeuygY/?img_index=2" target="_blank" rel="noopener"><img src="img/sbf101.jpg" alt="Two guests raising highballs, lit by flash" loading="lazy"></a><div class="cap"><b>TABASCO® Japan</b><span>Neo Fes launch · Tokyo</span></div></div>
+    </div>
+  </section>
+
+  <section id="setian">
+    <div class="head">
+      <h2 class="tab">Setian Jewellery</h2>
+      <p>Outside food. Concept, content and the whole Instagram feed for a jewellery brand in Dubai.</p>
+    </div>
+    <div class="feed" role="img" aria-label="Nine posts from the Setian Jewellery Instagram grid">
+      <img src="img/sbf202.jpg" alt=""><img src="img/sbf203.jpg" alt=""><img src="img/sbf204.jpg" alt="">
+      <img src="img/sbf205.jpg" alt=""><img src="img/sbf206.jpg" alt=""><img src="img/sbf207.jpg" alt="">
+      <img src="img/sbf208.jpg" alt=""><img src="img/sbf209.jpg" alt=""><img src="img/sbf210.jpg" alt="">
+    </div>
+  </section>
+
+  <div class="contact">
+    <h2>Concept, shoot, edit.<br>One hand, start to finish.</h2>
+    <p><a href="mailto:shotaronext@gmail.com">shotaronext@gmail.com</a><span>shotaronext@gmail.com · Dubai</span></p>
+  </div>
+  <footer>© 2026 Shotaro Kondo</footer>
+</div>
+<script>
+(function(){
+  // One film plays at a time: the visible one nearest the middle of the screen, muted until tapped.
+  var vids=[].slice.call(document.querySelectorAll('video.lv')),vis=new Set(),active=null,queued=false;
+  function chip(v){return v.parentNode.querySelector('.chip');}
+  function mute(v){v.muted=true;chip(v).textContent='Sound on';}
+  function play(v){if(v.preload==='none')v.preload='auto';var p=v.play();if(p&&p.catch)p.catch(function(){});}
+  function pick(){
+    queued=false;var mid=window.innerHeight/2,best=null,bd=1e9;
+    vis.forEach(function(v){var r=v.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=v;}});
+    if(best===active)return;
+    if(active){active.pause();mute(active);}
+    active=best;if(active)play(active);
+  }
+  function queue(){if(!queued){queued=true;requestAnimationFrame(pick);}}
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting)vis.add(e.target);else{vis.delete(e.target);e.target.pause();mute(e.target);if(e.target===active)active=null;}
+    });queue();},{threshold:.35});
+    vids.forEach(function(v){io.observe(v);});
+    window.addEventListener('scroll',queue,{passive:true});
+  }
+  // If a film file is missing, keep the poster and hide the sound chip.
+  vids.forEach(function(v){v.addEventListener('error',function(){var c=chip(v);if(c)c.style.display='none';},true);});
+  vids.forEach(function(v){
+    v.parentNode.addEventListener('click',function(){
+      if(v.muted){
+        vids.forEach(function(o){if(o!==v){o.pause();mute(o);}});
+        active=v;v.muted=false;v.currentTime=0;play(v);chip(v).textContent='Sound off';
+      }else{mute(v);}
+    });
+  });
+})();
+</script>
+</body>
+</html>
